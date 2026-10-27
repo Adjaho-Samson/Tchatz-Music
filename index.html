@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0B0D">
+  <meta name="description" content="Tchatz Music, ton lecteur musical privé. Importe et écoute tes fichiers audio directement sur cet appareil.">
+  <meta name="color-scheme" content="dark">
+  <title>Tchatz Music — Ta musique. Ton espace. Ton contrôle.</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#accueil" data-action="navigate" data-view="home" aria-label="Tchatz Music, accueil">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" rx="14" fill="currentColor"/><path d="M12 25.5h3.5l2.8-8 4.1 14 3.3-10 2.2 4H33" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="brand-type"><strong>Tchatz <span>Music</span></strong><small>TA MUSIQUE. TON ESPACE. TON CONTRÔLE.</small></span>
+      </a>
+      <div class="topbar-right">
+        <span class="local-badge" id="connectionBadge"><span class="status-dot" aria-hidden="true"></span><span id="connectionLabel">Bibliothèque locale</span></span>
+        <button class="button button-outline install-top" id="installTopButton" type="button" data-action="install" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0 4-4m-4 4-4-4M5 15v4h14v-4"/></svg>
+          Installer
+        </button>
+        <button class="icon-button top-settings" type="button" data-action="navigate" data-view="settings" aria-label="Ouvrir les paramètres" title="Paramètres">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Z"/><path d="m19.2 13.3 1.1.9-1.5 2.6-1.3-.5a7.6 7.6 0 0 1-1.5.9l-.2 1.4h-3l-.3-1.4a7.6 7.6 0 0 1-1.6-.7l-1.2.6-1.7-2.5 1.1-.9a7 7 0 0 1 0-1.8l-1.1-.9 1.5-2.6 1.3.5a7.6 7.6 0 0 1 1.5-.9l.2-1.4h3l.3 1.4a7.6 7.6 0 0 1 1.6.7l1.2-.6 1.7 2.5-1.1.9a7 7 0 0 1 0 1.8Z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main" id="main" tabindex="-1">
+      <section class="view" id="homeView" data-view-panel="home" aria-labelledby="homeHeading">
+        <div class="hero" id="homeHero"></div>
+        <div class="stats-grid" id="homeStats"></div>
+        <div class="home-sections" id="homeSections"></div>
+      </section>
+
+      <section class="view" id="libraryView" data-view-panel="library" aria-labelledby="libraryHeading" hidden>
+        <div class="page-heading page-heading-row">
+          <div><p class="eyebrow">TA COLLECTION</p><h1 id="libraryHeading">Ma bibliothèque</h1><p class="muted" id="librarySummary">Tes morceaux, conservés sur cet appareil.</p></div>
+          <button class="button button-primary" type="button" data-action="import"><span class="button-icon" aria-hidden="true">+</span>Importer</button>
+        </div>
+        <div class="library-tools">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg>
+            <span class="visually-hidden">Rechercher un morceau</span>
+            <input id="librarySearch" type="search" placeholder="Rechercher un titre ou un fichier…" autocomplete="off">
+            <button class="search-clear" id="clearSearchButton" type="button" aria-label="Effacer la recherche" hidden>×</button>
+          </label>
+          <div class="library-filters" role="group" aria-label="Filtrer les morceaux">
+            <button class="filter-chip is-active" type="button" data-action="set-filter" data-filter="all" aria-pressed="true">Tous</button>
+            <button class="filter-chip" type="button" data-action="set-filter" data-filter="favorites" aria-pressed="false">Favoris</button>
+          </div>
+          <label class="sort-control"><span>Trier</span>
+            <select id="librarySort" aria-label="Trier les morceaux">
+              <option value="recent">Ajoutés récemment</option>
+              <option value="title">Titre A–Z</option>
+            </select>
+          </label>
+        </div>
+        <p class="results-count" id="libraryResultsCount" aria-live="polite"></p>
+        <div class="track-list" id="libraryResults"></div>
+      </section>
+
+      <section class="view" id="playlistsView" data-view-panel="playlists" aria-labelledby="playlistsHeading" hidden>
+        <div class="page-heading page-heading-row">
+          <div><p class="eyebrow">À TON RYTHME</p><h1 id="playlistsHeading">Playlists</h1><p class="muted">Compose des sélections qui te ressemblent.</p></div>
+          <button class="button button-primary" type="button" data-action="create-playlist"><span class="button-icon" aria-hidden="true">+</span>Créer</button>
+        </div>
+        <div class="playlist-list" id="playlistList"></div>
+        <section class="playlist-detail" id="playlistDetail" hidden aria-live="polite"></section>
+      </section>
+
+      <section class="view" id="settingsView" data-view-panel="settings" aria-labelledby="settingsHeading" hidden>
+        <div class="page-heading"><p class="eyebrow">TON APP, TES RÈGLES</p><h1 id="settingsHeading">Paramètres</h1><p class="muted">Tout reste dans le navigateur de cet appareil.</p></div>
+        <div class="settings-grid">
+          <section class="settings-card storage-card" aria-labelledby="storageHeading">
+            <div class="settings-card-heading"><span class="settings-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v7c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12v7c0 1.7 3.6 3 8 3 2 0 3.9-.3 5.3-.9"/></svg></span><div><h2 id="storageHeading">Stockage local</h2><p class="muted">Espace utilisé par ce navigateur sur cette origine.</p></div></div>
+            <div class="storage-meter"><div class="storage-meter-fill" id="storageMeterFill"></div></div>
+            <div class="storage-numbers"><strong id="storageUsage">Calcul en cours…</strong><span id="storageQuota"></span></div>
+            <p class="small-note" id="storageNote">Les fichiers audio sélectionnés sont enregistrés dans IndexedDB, sur cet appareil.</p>
+            <div class="button-row"><button class="button button-outline" type="button" data-action="refresh-storage">Actualiser</button><button class="button button-outline" type="button" data-action="persist-storage">Protéger le stockage</button></div>
+            <p class="small-note" id="persistStatus" aria-live="polite"></p>
+          </section>
+
+          <section class="settings-card install-card" aria-labelledby="installHeading">
+            <div class="settings-card-heading"><span class="settings-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 15v4h14v-4"/></svg></span><div><h2 id="installHeading">Installer Tchatz Music</h2><p class="muted" id="installHelp">Ajoute ton lecteur à l’écran d’accueil.</p></div></div>
+            <button class="button button-primary" id="installSettingsButton" type="button" data-action="install" hidden>Installer l’application</button>
+            <ol class="install-steps" id="installSteps">
+              <li>Ouvre ce site dans Chrome sur Android.</li>
+              <li>Dans le menu du navigateur, choisis « Installer l’application » ou « Ajouter à l’écran d’accueil ».</li>
+              <li>Confirme pour lancer Tchatz Music en plein écran.</li>
+            </ol>
+            <p class="small-note">L’installation nécessite un hébergement HTTPS compatible. Le panneau d’aperçu Arena peut limiter l’installation directe.</p>
+          </section>
+
+          <section class="settings-card privacy-card" aria-labelledby="privacyHeading">
+            <div class="settings-card-heading"><span class="settings-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.8 2.9 8.1 7 10 4.1-1.9 7-5.2 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h2 id="privacyHeading">Vie privée</h2><p class="muted">Pas de compte, pas de serveur, pas d’envoi audio.</p></div></div>
+            <p class="settings-copy">Tchatz Music ne peut accéder qu’aux fichiers que tu choisis dans le sélecteur Android. L’import crée une copie locale dans le stockage du navigateur ; le fichier d’origine n’est pas modifié. Les données de navigateur peuvent être effacées par le système ou lors d’un nettoyage : garde tes fichiers originaux.</p>
+          </section>
+
+          <section class="settings-card data-card" aria-labelledby="dataHeading">
+            <div class="settings-card-heading"><span class="settings-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v5m4-5v5"/></svg></span><div><h2 id="dataHeading">Données de l’application</h2><p class="muted">Retire les fichiers importés ou réinitialise tes préférences.</p></div></div>
+            <div class="data-actions"><button class="button button-outline" type="button" data-action="reset-preferences">Réinitialiser les préférences</button><button class="button button-danger-outline" type="button" data-action="clear-data">Effacer toutes les données locales</button></div>
+            <p class="small-note">L’effacement des données supprime définitivement la bibliothèque Tchatz Music de ce navigateur. Cela ne supprime pas les originaux du téléphone.</p>
+          </section>
+        </div>
+        <footer class="app-footer"><span>Tchatz Music</span><span>Ta musique. Ton espace. Ton contrôle.</span><span id="appVersion">Version 1.0</span></footer>
+      </section>
+    </main>
+
+    <section class="mini-player" id="miniPlayer" aria-label="Mini-lecteur" hidden>
+      <div class="mini-player-progress" id="miniProgress"></div>
+      <button class="mini-player-main" type="button" data-action="open-player" aria-label="Ouvrir le lecteur complet">
+        <span class="artwork artwork-small" id="miniArtwork" aria-hidden="true"></span>
+        <span class="mini-track-info"><strong id="miniTitle">—</strong><span id="miniArtist">Aucun morceau</span></span>
+      </button>
+      <button class="icon-button mini-toggle" type="button" data-action="toggle-play" aria-label="Lecture" title="Lecture ou pause" id="miniPlayButton"></button>
+      <button class="icon-button mini-next" type="button" data-action="next" aria-label="Morceau suivant" title="Suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6v12l9-6-9-6Zm10 0v12m4-12v12"/></svg></button>
+    </section>
+
+    <nav class="bottom-nav" aria-label="Navigation principale">
+      <button class="nav-item is-active" type="button" data-action="navigate" data-view="home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/></svg><span>Accueil</span></button>
+      <button class="nav-item" type="button" data-action="navigate" data-view="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 5v14m8-14v14"/></svg><span>Bibliothèque</span></button>
+      <button class="nav-item" type="button" data-action="navigate" data-view="playlists"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 11h12M4 16h9M17 14v6l5-3-5-3Z"/></svg><span>Playlists</span></button>
+      <button class="nav-item" type="button" data-action="navigate" data-view="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Z"/><path d="m19.2 13.3 1.1.9-1.5 2.6-1.3-.5a7.6 7.6 0 0 1-1.5.9l-.2 1.4h-3l-.3-1.4a7.6 7.6 0 0 1-1.6-.7l-1.2.6-1.7-2.5 1.1-.9a7 7 0 0 1 0-1.8l-1.1-.9 1.5-2.6 1.3.5a7.6 7.6 0 0 1 1.5-.9l.2-1.4h3l.3 1.4a7.6 7.6 0 0 1 1.6.7l1.2-.6 1.7 2.5-1.1.9a7 7 0 0 1 0 1.8Z"/></svg><span>Paramètres</span></button>
+    </nav>
+  </div>
+
+  <audio id="audio" preload="metadata" playsinline></audio>
+  <input id="filePicker" class="visually-hidden" type="file" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac" multiple aria-label="Sélectionner des fichiers audio">
+
+  <dialog class="player-dialog" id="playerDialog" aria-label="Lecteur musical">
+    <div class="player-dialog-inner">
+      <header class="player-topline">
+        <button class="icon-button" type="button" data-action="close-player" aria-label="Fermer le lecteur" title="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="player-top-label"><span class="player-live-dot"></span><span>LECTEUR</span></div>
+        <button class="icon-button" type="button" data-action="navigate" data-view="library" aria-label="Ouvrir la bibliothèque" title="Bibliothèque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 5v14m8-14v14"/></svg></button>
+      </header>
+      <div class="player-artwork-wrap"><div class="artwork artwork-large" id="playerArtwork" aria-hidden="true"></div></div>
+      <div class="player-track-meta"><div class="player-track-copy"><h2 id="playerTitle">Choisis un morceau</h2><p id="playerArtist">Ta musique. Ton espace. Ton contrôle.</p><p class="player-filename" id="playerFilename"></p></div><button class="icon-button player-favorite" id="playerFavoriteButton" type="button" data-action="toggle-current-favorite" aria-label="Ajouter aux favoris" title="Favori"></button></div>
+      <div class="player-timeline">
+        <label class="visually-hidden" for="seekRange">Position dans le morceau</label>
+        <input id="seekRange" class="range-input seek-range" type="range" min="0" max="1000" value="0" step="1" disabled>
+        <div class="time-row"><span id="elapsedTime">0:00</span><span id="totalTime">0:00</span></div>
+      </div>
+      <div class="player-controls">
+        <button class="player-side-control" id="shuffleButton" type="button" data-action="toggle-shuffle" aria-label="Activer le mode aléatoire" aria-pressed="false" title="Aléatoire"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5m0-5-6.5 6.5M4 7h2.5c4.4 0 6.6 10 11 10H21m0 0-5-5m5 5-5 5M4 17h2.5c1.4 0 2.5-1.2 3.5-2.7"/></svg></button>
+        <button class="player-side-control" type="button" data-action="previous" aria-label="Morceau précédent" title="Précédent"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6v12l-9-6 9-6ZM5 6v12"/></svg></button>
+        <button class="play-primary" id="mainPlayButton" type="button" data-action="toggle-play" aria-label="Lecture" title="Lecture"></button>
+        <button class="player-side-control" type="button" data-action="next" aria-label="Morceau suivant" title="Suivant"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6v12l9-6-9-6Zm10 0v12"/></svg></button>
+        <button class="player-side-control repeat-control" id="repeatButton" type="button" data-action="toggle-repeat" aria-label="Répétition désactivée" aria-pressed="false" title="Répétition"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m17 2 4 4-4 4M3 11V9a3 3 0 0 1 3-3h15M7 22l-4-4 4-4m14-1v2a3 3 0 0 1-3 3H3"/></svg><span class="repeat-one-mark" id="repeatOneMark" hidden>1</span></button>
+      </div>
+      <div class="player-status-row"><span id="playbackState" aria-live="polite">En attente</span><div class="volume-control"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h4l5 4V6l-5 4H4Zm12-2a6 6 0 0 1 0 8m2-11a10 10 0 0 1 0 14"/></svg><label class="visually-hidden" for="volumeRange">Volume</label><input id="volumeRange" class="range-input volume-range" type="range" min="0" max="1" step="0.01" value="0.8"></div></div>
+      <p class="player-footnote">La lecture en arrière-plan dépend du navigateur et des réglages Android.</p>
+    </div>
+  </dialog>
+
+  <dialog class="form-dialog" id="playlistDialog" aria-labelledby="playlistDialogHeading">
+    <form id="playlistForm" method="dialog">
+      <button class="dialog-close icon-button" type="button" data-action="close-playlist-dialog" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      <p class="eyebrow">TA SÉLECTION</p><h2 id="playlistDialogHeading">Créer une playlist</h2>
+      <label class="form-label" for="playlistName">Nom de la playlist</label>
+      <input id="playlistName" class="text-input" type="text" maxlength="48" autocomplete="off" placeholder="Ex. Mes incontournables" required>
+      <p class="form-error" id="playlistFormError" aria-live="polite"></p>
+      <div class="dialog-actions"><button class="button button-outline" type="button" data-action="close-playlist-dialog">Annuler</button><button class="button button-primary" type="submit">Enregistrer</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="form-dialog add-track-dialog" id="addToPlaylistDialog" aria-labelledby="addToPlaylistHeading">
+    <div>
+      <button class="dialog-close icon-button" type="button" data-action="close-add-dialog" aria-label="Fermer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      <p class="eyebrow">ORGANISER</p><h2 id="addToPlaylistHeading">Ajouter à une playlist</h2>
+      <p class="muted add-track-name" id="addTrackName"></p>
+      <div id="playlistChoiceList" class="playlist-choice-list"></div>
+      <button class="button button-outline full-width" type="button" data-action="create-playlist-from-add">Créer une playlist</button>
+    </div>
+  </dialog>
+
+  <dialog class="form-dialog import-dialog" id="importDialog" aria-labelledby="importHeading">
+    <div>
+      <p class="eyebrow">BIBLIOTHÈQUE LOCALE</p><h2 id="importHeading">Import de musique</h2>
+      <p class="muted" id="importStatus">Préparation des fichiers…</p>
+      <progress class="import-progress" id="importProgress" max="100" value="0">0%</progress>
+      <p class="import-counts" id="importCounts">0 sur 0</p>
+      <ul class="import-issues" id="importIssues" aria-live="polite"></ul>
+      <div class="dialog-actions"><button class="button button-primary" id="importCloseButton" type="button" data-action="close-import" disabled>Fermer</button></div>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
